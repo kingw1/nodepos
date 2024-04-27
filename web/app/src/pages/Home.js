@@ -1,7 +1,11 @@
+import Template from "../components/Template";
+
 function Home() {
   return (
     <>
-      <div className="h1">Home</div>
+      <Template>
+        <div className="h1">Home</div>
+      </Template>
     </>
   );
 }

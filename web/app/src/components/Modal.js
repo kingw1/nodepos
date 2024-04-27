@@ -1,8 +1,12 @@
 function Modal(props) {
+  let modalSize = "modal-dialog";
+  if (props.modalSize) {
+    modalSize += " " + props.modalSize;
+  }
   return (
     <>
       <div className="modal" tabIndex="-1" id={props.id}>
-        <div className="modal-dialog">
+        <div className={modalSize}>
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">{props.title}</h5>

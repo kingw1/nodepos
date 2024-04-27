@@ -2,10 +2,12 @@ const express = require("express");
 const app = express();
 const PackageModel = require("../models/PackageModel");
 
-app.get("/package/list", async (req, res) => {
+app.get("/packages/list", async (req, res) => {
   try {
-    const result = await PackageModel.findAll();
-    res.send({ result: result });
+    const results = await PackageModel.findAll({
+      order: ["price"],
+    });
+    res.send({ results: results });
   } catch (e) {
     res.statusCode(500).send({ message: e.message });
   }

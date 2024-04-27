@@ -2,10 +2,13 @@ import { useEffect, useState } from "react";
 import config from "../config";
 import axios from "axios";
 import Modal from "../components/Modal";
+import Swal from "sweetalert2";
 
 function Package() {
   const [packages, setPackages] = useState([]);
   const [yourPackage, setYourPackage] = useState({});
+  const [name, setName] = useState();
+  const [phone, setPhone] = useState();
 
   useEffect(() => {
     fetchData();
@@ -28,6 +31,46 @@ function Package() {
 
   const choosePackage = (item) => {
     setYourPackage(item);
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+
+    try {
+      Swal.fire({
+        text: "Please confirm to register this package?",
+        icon: "question",
+        showCancelButton: true,
+        showConfirmButton: true,
+      }).then((res) => {
+        if (res.isConfirmed) {
+          const payload = {
+            packageId: yourPackage.id,
+            name: name,
+            phone: phone,
+          };
+
+          axios
+            .post(config.api_path + "/packages/register", payload)
+            .then((res) => {
+              if (res.data.message === "success") {
+                Swal.fire({
+                  text: "Register Successfully",
+                  icon: "success",
+                  timer: 2000,
+                });
+
+                document.getElementById("btnModalClose").click();
+              }
+            })
+            .catch((err) => {
+              throw err.response.data;
+            });
+        }
+      });
+    } catch (e) {
+      console.log(e.message);
+    }
   };
 
   return (
@@ -65,7 +108,7 @@ function Package() {
       </div>
 
       <Modal id="modalRegister" title="Register">
-        <form>
+        <form onSubmit={handleRegister}>
           <div>
             <label>Package</label>
             <div className="alert alert-info">
@@ -75,14 +118,22 @@ function Package() {
           </div>
           <div className="mt-3">
             <label>Shop</label>
-            <input type="text" className="form-control" />
+            <input
+              type="text"
+              className="form-control"
+              onChange={(e) => setName(e.target.value)}
+            />
           </div>
           <div className="mt-3">
             <label>Phone</label>
-            <input type="text" className="form-control" />
+            <input
+              type="text"
+              className="form-control"
+              onChange={(e) => setPhone(e.target.value)}
+            />
           </div>
           <div className="mt-3">
-            <button className="btn btn-primary">
+            <button className="btn btn-primary" onClick={handleRegister}>
               Confirm <i className="fa fa-arrow-right"></i>
             </button>
           </div>

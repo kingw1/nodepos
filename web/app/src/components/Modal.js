@@ -11,6 +11,7 @@ function Modal(props) {
                 className="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
+                id="btnModalClose"
               ></button>
             </div>
             <div className="modal-body">{props.children}</div>

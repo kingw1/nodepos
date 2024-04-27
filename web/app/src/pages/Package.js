@@ -77,7 +77,7 @@ function Package() {
     } catch (e) {
       Swal.fire({
         title: "Error",
-        message: e.message,
+        text: e.message,
         icon: "error",
       });
     }

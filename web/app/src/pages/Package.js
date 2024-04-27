@@ -3,12 +3,15 @@ import config from "../config";
 import axios from "axios";
 import Modal from "../components/Modal";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 function Package() {
   const [packages, setPackages] = useState([]);
   const [yourPackage, setYourPackage] = useState({});
   const [name, setName] = useState();
   const [phone, setPhone] = useState();
+  const [pass, setPass] = useState();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchData();
@@ -48,6 +51,7 @@ function Package() {
             packageId: yourPackage.id,
             name: name,
             phone: phone,
+            pass: pass,
           };
 
           axios
@@ -61,6 +65,8 @@ function Package() {
                 });
 
                 document.getElementById("btnModalClose").click();
+
+                navigate("/login");
               }
             })
             .catch((err) => {
@@ -69,7 +75,11 @@ function Package() {
         }
       });
     } catch (e) {
-      console.log(e.message);
+      Swal.fire({
+        title: "Error",
+        message: e.message,
+        icon: "error",
+      });
     }
   };
 
@@ -130,6 +140,14 @@ function Package() {
               type="text"
               className="form-control"
               onChange={(e) => setPhone(e.target.value)}
+            />
+          </div>
+          <div className="mt-3">
+            <label>Password</label>
+            <input
+              type="password"
+              className="form-control"
+              onChange={(e) => setPass(e.target.value)}
             />
           </div>
           <div className="mt-3">

@@ -1,7 +1,7 @@
 function Modal(props) {
   return (
     <>
-      <div className="modal" tabindex="-1" id={props.id}>
+      <div className="modal" tabIndex="-1" id={props.id}>
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">

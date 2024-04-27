@@ -10,6 +10,7 @@ app.use(bodyParser.json());
 
 app.use(require("./controllers/PackageController"));
 app.use(require("./controllers/MemberController"));
+app.use(require("./controllers/ProductController"));
 
 app.listen(port, () => {
   console.log(`api listening on port`, port);

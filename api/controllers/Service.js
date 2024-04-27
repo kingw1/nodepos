@@ -5,7 +5,6 @@ module.exports = {
   isLogedIn: (req, res, next) => {
     require("dotenv").config();
     const jwt = require("jsonwebtoken");
-    const service = require("./Service");
     const secret = process.env.secret;
 
     try {

@@ -21,6 +21,6 @@ const MemberModel = conn.define("member", {
   },
 });
 
-MemberModel.sync({ alter: true });
+// MemberModel.sync({ alter: true });
 
 module.exports = MemberModel;

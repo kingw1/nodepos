@@ -525,20 +525,21 @@ function Product() {
                       Main
                     </label>
                   ) : (
-                    <button
-                      className="btn btn-default btn-sm btn-block"
-                      onClick={(e) => handleChooseMainImage(item)}
-                    >
-                      Main
-                    </button>
+                    <div>
+                      <button
+                        className="btn btn-default btn-sm btn-block"
+                        onClick={(e) => handleChooseMainImage(item)}
+                      >
+                        Main
+                      </button>
+                      <button
+                        className="btn btn-danger btn-sm btn-block"
+                        onClick={(e) => handleImageDelete(item)}
+                      >
+                        <i className="fa fa-times"></i>
+                      </button>
+                    </div>
                   )}
-
-                  <button
-                    className="btn btn-danger btn-sm btn-block"
-                    onClick={(e) => handleImageDelete(item)}
-                  >
-                    <i className="fa fa-times"></i>
-                  </button>
                 </div>
               ))
             : "No image"}

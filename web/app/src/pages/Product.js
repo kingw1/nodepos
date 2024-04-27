@@ -8,6 +8,8 @@ import Swal from "sweetalert2";
 function Product() {
   const [product, setProduct] = useState({});
   const [products, setProducts] = useState({});
+  const [productImage, setProductImage] = useState({});
+  const [productImages, setProductImages] = useState({});
 
   useEffect(() => {
     fetchData();
@@ -135,6 +137,186 @@ function Product() {
     });
   };
 
+  const handleChangeFile = (e) => {
+    setProductImage(e.target.files[0]);
+  };
+
+  const handleUpload = async () => {
+    Swal.fire({
+      text: "Confirm to upload image",
+      icon: "question",
+      showCancelButton: true,
+      showConfirmButton: true,
+    }).then(async (res) => {
+      if (res.isConfirmed) {
+        try {
+          const _config = {
+            headers: {
+              Authorization:
+                "Bearer " + localStorage.getItem(config.token_name),
+              "Content-Type": "multipart/form-data",
+            },
+          };
+          const formData = new FormData();
+          formData.append("productImage", productImage);
+          formData.append("productImageName", productImage.name);
+          formData.append("productId", product.id);
+
+          await axios
+            .post(config.api_path + "/productImage/upload", formData, _config)
+            .then((res) => {
+              if (res.data.message === "success") {
+                Swal.fire({
+                  text: "Upload product image successfully",
+                  icon: "success",
+                  timer: 2000,
+                });
+
+                fetchDataProductImage(product);
+                handleClose();
+              }
+            })
+            .catch((error) => {
+              Swal.fire({
+                title: "Error",
+                text: error.message,
+                icon: "error",
+              });
+            });
+        } catch (error) {
+          Swal.fire({
+            title: "Error",
+            text: error.message,
+            icon: "error",
+          });
+        }
+      }
+    });
+  };
+
+  const fetchDataProductImage = async (item) => {
+    try {
+      await axios
+        .get(
+          config.api_path + "/productImage/list/" + item.id,
+          config.headers()
+        )
+        .then((res) => {
+          if (res.data.message === "success") {
+            setProductImages(res.data.results);
+          }
+        })
+        .catch((error) => {
+          Swal.fire({
+            title: "Error",
+            text: error.message,
+            icon: "error",
+          });
+        });
+    } catch (error) {
+      Swal.fire({
+        title: "Error",
+        text: error.message,
+        icon: "error",
+      });
+    }
+  };
+
+  const handleChooseProduct = (item) => {
+    setProduct(item);
+    fetchDataProductImage(item);
+  };
+
+  const handleChooseMainImage = (item) => {
+    Swal.fire({
+      text: "Confirm to choose main image",
+      icon: "question",
+      showCancelButton: true,
+      showConfirmButton: true,
+    }).then(async (res) => {
+      if (res.isConfirmed) {
+        try {
+          const url =
+            config.api_path +
+            "/productImage/choose-main-image/" +
+            item.id +
+            "/" +
+            item.productId;
+          await axios
+            .get(url, config.headers())
+            .then((res) => {
+              if (res.data.message === "success") {
+                fetchDataProductImage({
+                  id: item.productId,
+                });
+                Swal.fire({
+                  text: "Choose main image successfully",
+                  icon: "success",
+                  timer: 2000,
+                });
+              }
+            })
+            .catch((error) => {
+              Swal.fire({
+                title: "Error",
+                text: error.message,
+                icon: "error",
+              });
+            });
+        } catch (error) {
+          Swal.fire({
+            title: "Error",
+            text: error.message,
+            icon: "error",
+          });
+        }
+      }
+    });
+  };
+
+  const handleImageDelete = (item) => {
+    Swal.fire({
+      text: "Confirm to delete image",
+      icon: "question",
+      showCancelButton: true,
+      showConfirmButton: true,
+    }).then(async (res) => {
+      if (res.isConfirmed) {
+        try {
+          const url = config.api_path + "/productImage/delete/" + item.id;
+          await axios
+            .delete(url, config.headers())
+            .then((res) => {
+              if (res.data.message === "success") {
+                fetchDataProductImage({
+                  id: item.productId,
+                });
+
+                Swal.fire({
+                  text: "Delete image successfully",
+                  icon: "success",
+                  timer: 2000,
+                });
+              }
+            })
+            .catch((error) => {
+              Swal.fire({
+                title: "Error",
+                text: error.message,
+                icon: "error",
+              });
+            });
+        } catch (error) {
+          Swal.fire({
+            title: "Error",
+            text: error.message,
+            icon: "error",
+          });
+        }
+      }
+    });
+  };
+
   return (
     <>
       <Template>
@@ -160,7 +342,7 @@ function Product() {
                   <th>Detail</th>
                   <th className="text-right">Cost</th>
                   <th className="text-right">Price</th>
-                  <th width="150px">Action</th>
+                  <th width="180px">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -178,7 +360,15 @@ function Product() {
                         </td>
                         <td>
                           <button
-                            className="btn btn-info"
+                            className="btn btn-default mr-1"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalProductImage"
+                            onClick={(e) => handleChooseProduct(product)}
+                          >
+                            <i className="fa fa-image"></i>
+                          </button>
+                          <button
+                            className="btn btn-info mr-1"
                             data-bs-toggle="modal"
                             data-bs-target="#modalProduct"
                             onClick={(e) => setProduct(product)}
@@ -186,7 +376,7 @@ function Product() {
                             <i className="fa fa-pencil"></i>
                           </button>
                           <button
-                            className="ml-2 btn btn-danger"
+                            className="btn btn-danger"
                             onClick={(e) => handleDelete(product)}
                           >
                             <i className="fa fa-times"></i>
@@ -268,6 +458,91 @@ function Product() {
             </button>
           </div>
         </form>
+      </Modal>
+      <Modal id="modalProductImage" title="Product Image" modalSize="modal-lg">
+        <div className="row">
+          <div className="col-4">
+            <label>Barcode</label>
+            <input
+              type="text"
+              value={product.barcode}
+              className="form-control"
+              disabled
+            />
+          </div>
+          <div className="col-8">
+            <label>Product</label>
+            <input
+              type="text"
+              value={product.name}
+              className="form-control"
+              disabled
+            />
+          </div>
+          <div className="col-12 mt-3">
+            <label>Detail</label>
+            <input
+              type="text"
+              value={product.detail}
+              className="form-control"
+              disabled
+            />
+          </div>
+
+          <div className="col-12 mt-3">
+            <label>Browse image</label>
+            <input
+              type="file"
+              className="form-control"
+              onChange={handleChangeFile}
+              accept="image/png, image/jpeg"
+            />
+          </div>
+        </div>
+        <div className="mt-3">
+          <button className="btn btn-primary " onClick={handleUpload}>
+            <i className="fa fa-check mr-2"></i>
+            Upload Image
+          </button>
+        </div>
+
+        <div className="mt-3 h5">Images</div>
+        <div className="row">
+          {productImages.length > 0
+            ? productImages.map((item) => (
+                <div className="col-3 text-center " key={item.id}>
+                  <div>
+                    <img
+                      src={config.api_path + "/uploads/" + item.imageName}
+                      alt={item.imageName}
+                      width="100%"
+                    />
+                  </div>
+
+                  {item.isMain ? (
+                    <label className="btn btn-success btn-sm btn-block active">
+                      <i className="fa fa-check-circle text-white mr-2"></i>
+                      Main
+                    </label>
+                  ) : (
+                    <button
+                      className="btn btn-default btn-sm btn-block"
+                      onClick={(e) => handleChooseMainImage(item)}
+                    >
+                      Main
+                    </button>
+                  )}
+
+                  <button
+                    className="btn btn-danger btn-sm btn-block"
+                    onClick={(e) => handleImageDelete(item)}
+                  >
+                    <i className="fa fa-times"></i>
+                  </button>
+                </div>
+              ))
+            : "No image"}
+        </div>
       </Modal>
     </>
   );

@@ -22,8 +22,12 @@ function Sidebar() {
             setPackageName(res.data.result.package.name);
           }
         })
-        .catch((err) => {
-          throw err.response.data;
+        .catch((error) => {
+          Swal.fire({
+            title: "Error",
+            text: error.message,
+            icon: "error",
+          });
         });
     } catch (e) {
       Swal.fire({

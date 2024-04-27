@@ -7,10 +7,12 @@ const bodyParser = require("body-parser");
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use("/uploads", express.static("uploads"));
 
 app.use(require("./controllers/PackageController"));
 app.use(require("./controllers/MemberController"));
 app.use(require("./controllers/ProductController"));
+app.use(require("./controllers/ProductImageController"));
 
 app.listen(port, () => {
   console.log(`api listening on port`, port);

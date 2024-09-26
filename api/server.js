@@ -13,6 +13,7 @@ app.use(require("./controllers/PackageController"));
 app.use(require("./controllers/MemberController"));
 app.use(require("./controllers/ProductController"));
 app.use(require("./controllers/ProductImageController"));
+app.use(require("./controllers/UserController"));
 
 app.listen(port, () => {
   console.log(`api listening on port`, port);

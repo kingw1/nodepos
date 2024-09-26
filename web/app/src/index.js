@@ -6,6 +6,7 @@ import Package from "./pages/Package";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Product from "./pages/Product";
+import User from "./pages/User";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
   {
     path: "/product",
     element: <Product />,
+  },
+  {
+    path: "/user",
+    element: <User />,
   },
 ]);
 

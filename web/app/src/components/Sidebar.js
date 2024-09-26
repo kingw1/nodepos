@@ -84,6 +84,12 @@ function Sidebar() {
                   <p>Product</p>
                 </Link>
               </li>
+              <li class="nav-item">
+                <Link to="/user" class="nav-link">
+                  <i class="nav-icon fas fa-users"></i>
+                  <p>User</p>
+                </Link>
+              </li>
             </ul>
           </nav>
         </div>

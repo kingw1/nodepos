@@ -1,11 +1,15 @@
 const express = require("express");
 const app = express();
-const service = require("./Service");
+const Service = require("./Service");
 const UserModel = require("../models/UserModel");
 
-app.get("/user/list", service.isLogedIn, async (req, res) => {
+app.get("/user/list", Service.isLogedIn, async (req, res) => {
   try {
     const results = await UserModel.findAll({
+      where: {
+        userId: Service.getMemberId(req),
+      },
+      attributes: ["id", "level", "name", "usr"],
       order: [["id", "DESC"]],
     });
     res.send({ message: "success", results: results });
@@ -14,18 +18,24 @@ app.get("/user/list", service.isLogedIn, async (req, res) => {
   }
 });
 
-app.post("/user/create", service.isLogedIn, async (req, res) => {
+app.post("/user/create", Service.isLogedIn, async (req, res) => {
   try {
-    await UserModel.create(req.body);
+    let payload = req.body;
+    payload.userId = Service.getMemberId(req);
+
+    await UserModel.create(payload);
     res.send({ message: "success" });
   } catch (e) {
     res.status(500).send({ message: e.message });
   }
 });
 
-app.post("/user/edit", service.isLogedIn, async (req, res) => {
+app.post("/user/edit", Service.isLogedIn, async (req, res) => {
   try {
-    await UserModel.update(req.body, {
+    let payload = req.body;
+    payload.userId = Service.getMemberId(req);
+
+    await UserModel.update(payload, {
       where: {
         id: req.body.id,
       },
@@ -36,7 +46,7 @@ app.post("/user/edit", service.isLogedIn, async (req, res) => {
   }
 });
 
-app.delete("/user/delete/:id", service.isLogedIn, async (req, res) => {
+app.delete("/user/delete/:id", Service.isLogedIn, async (req, res) => {
   try {
     await UserModel.destroy({
       where: {

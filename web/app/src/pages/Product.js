@@ -78,12 +78,8 @@ function Product() {
             handleClose();
           }
         })
-        .catch((error) => {
-          Swal.fire({
-            title: "Error",
-            text: error.message,
-            icon: "error",
-          });
+        .catch((err) => {
+          throw err.response.data;
         });
     } catch (error) {
       Swal.fire({
@@ -176,12 +172,8 @@ function Product() {
                 handleClose();
               }
             })
-            .catch((error) => {
-              Swal.fire({
-                title: "Error",
-                text: error.message,
-                icon: "error",
-              });
+            .catch((err) => {
+              throw err.response.data;
             });
         } catch (error) {
           Swal.fire({
@@ -454,7 +446,7 @@ function Product() {
           </div>
           <div className="mt-3">
             <button className="btn btn-primary " onClick={handleSave}>
-              <i class="fa fa-check mr-2"></i> Save Product
+              <i className="fa fa-check mr-2"></i> Save Product
             </button>
           </div>
         </form>

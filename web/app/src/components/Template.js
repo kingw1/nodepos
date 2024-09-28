@@ -4,7 +4,7 @@ import Sidebar from "./Sidebar";
 function Template(props) {
   return (
     <>
-      <div class="wrapper">
+      <div className="wrapper">
         <Navbar />
         <Sidebar />
 

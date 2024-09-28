@@ -81,28 +81,33 @@ function Navbar() {
   return (
     <>
       <nav className="main-header navbar navbar-expand navbar-white navbar-light">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" data-widget="pushmenu" href="#" role="button">
-              <i class="fas fa-bars"></i>
+        <ul className="navbar-nav">
+          <li className="nav-item">
+            <a
+              className="nav-link"
+              data-widget="pushmenu"
+              href="#"
+              role="button"
+            >
+              <i className="fas fa-bars"></i>
             </a>
           </li>
         </ul>
         <ul className="navbar-nav ml-auto">
-          <li class="nav-item">
+          <li className="nav-item">
             <button
               className="nav-link"
               data-bs-toggle="modal"
               data-bs-target="#modalEditProfile"
               onClick={handleEditProfile}
             >
-              <i className="fa fa-user"></i>
+              <i className="fa fa-user me-1"></i>
               User
             </button>
           </li>
           <li className="nav-item">
             <button className="btn btn-danger " onClick={handleSignOut}>
-              <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out
+              <i className="fa-solid fa-arrow-right-from-bracket"></i> Sign Out
             </button>
           </li>
         </ul>

@@ -1,27 +1,25 @@
 const conn = require("../connect");
 const { DataTypes } = require("sequelize");
-const UserModel = conn.define("user", {
+
+const BillSaleModel = conn.define("billSale", {
   id: {
     type: DataTypes.BIGINT,
     autoIncrement: true,
     primaryKey: true,
   },
-  name: {
-    type: DataTypes.STRING,
+  payDate: {
+    type: DataTypes.DATE,
   },
-  usr: {
+  status: {
     type: DataTypes.STRING,
-  },
-  pwd: {
-    type: DataTypes.STRING,
-  },
-  level: {
-    type: DataTypes.STRING,
+    defaultValue: "open",
+    allowNull: false,
   },
   userId: {
     type: DataTypes.BIGINT,
   },
 });
 
-UserModel.sync({ alter: true });
-module.exports = UserModel;
+BillSaleModel.sync({ alter: true });
+
+module.exports = BillSaleModel;

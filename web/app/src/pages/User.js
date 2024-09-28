@@ -95,12 +95,8 @@ function User() {
             fetchData();
           }
         })
-        .catch((error) => {
-          Swal.fire({
-            title: "Error",
-            text: error.message,
-            icon: "error",
-          });
+        .catch((err) => {
+          throw err.response.data;
         });
     } catch (error) {
       Swal.fire({
@@ -192,7 +188,7 @@ function User() {
               <tbody>
                 {users.length > 0
                   ? users.map((user) => (
-                      <tr>
+                      <tr key={user.id}>
                         <td>{user.name}</td>
                         <td>{user.usr}</td>
                         <td>{user.level}</td>
@@ -277,7 +273,7 @@ function User() {
           </div>
           <div className="mt-3">
             <button className="btn btn-primary" onClick={handleSave}>
-              <i class="fa fa-check mr-2"></i> Save User
+              <i className="fa fa-check mr-2"></i> Save User
             </button>
           </div>
         </form>

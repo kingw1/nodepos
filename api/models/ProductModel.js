@@ -21,8 +21,11 @@ const ProductModel = conn.define("product", {
   detail: {
     type: DataTypes.STRING,
   },
+  userId: {
+    type: DataTypes.BIGINT,
+  },
 });
 
-// ProductModel.sync({ alter: true });
+ProductModel.sync({ alter: true });
 
 module.exports = ProductModel;
